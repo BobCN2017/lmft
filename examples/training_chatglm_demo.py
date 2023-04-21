@@ -101,13 +101,13 @@ def finetune_demo():
         print(response)
         response, history = model.chat("我的蓝牙耳机坏了，我应该是去看哪个医院或牙医", history=[])
         print(response)
-        del model
-
-        ref_model = ChatGlmModel(args.model_type, args.model_name,
-                                 args={'use_lora': False, 'eval_batch_size': args.batch_size})
-        test_df['predict_before'] = ref_model.predict(test_df['prompt'].tolist())
+        # del model
+        #
+        # ref_model = ChatGlmModel(args.model_type, args.model_name,
+        #                          args={'use_lora': False, 'eval_batch_size': args.batch_size})
+        # test_df['predict_before'] = ref_model.predict(test_df['prompt'].tolist())
         logger.debug('test_df result: {}'.format(test_df))
-        out_df = test_df[['instruction', 'input', 'output', 'predict_before', 'predict_after']]
+        out_df = test_df[['instruction', 'input', 'output',  'predict_after']]
         out_df.to_json('test_result.json', force_ascii=False, orient='records', lines=True)
 
 
