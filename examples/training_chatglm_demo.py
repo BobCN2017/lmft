@@ -18,7 +18,7 @@ def load_data(file_path):
         for line in f:
             line = line.strip('\n')
             terms = line.split('\t')
-            instruction = '对下面中文拼写纠错：'
+            instruction = '阿迪客服回答：'
             if len(terms) == 2:
                 data.append([instruction, terms[0], terms[1]])
             else:
@@ -87,14 +87,28 @@ def finetune_demo():
         print(response)
         response, history = model.chat("晚上睡不着应该怎么办", history=history)
         print(response)
-        del model
+        response, history = model.chat("李明是李丽的哥哥，刘云是李丽的妈妈，李明是刘云的谁？", history=[])
+        print(response)
+        response, history = model.chat("江西省的省会，介绍一下", history=[])
+        print(response)
 
-        ref_model = ChatGlmModel(args.model_type, args.model_name,
-                                 args={'use_lora': False, 'eval_batch_size': args.batch_size})
-        test_df['predict_before'] = ref_model.predict(test_df['prompt'].tolist())
-        logger.debug('test_df result: {}'.format(test_df))
-        out_df = test_df[['instruction', 'input', 'output', 'predict_before', 'predict_after']]
-        out_df.to_json('test_result.json', force_ascii=False, orient='records', lines=True)
+        response, history = model.chat("一步步的算：520+250=", history=history)
+        print(response)
+        response, history = model.chat("讲个笑话", history=[])
+        print(response)
+
+        response, history = model.chat("写一段快速排序的python", history=history)
+        print(response)
+        response, history = model.chat("我的蓝牙耳机坏了，我应该是去看哪个医院或牙医", history=[])
+        print(response)
+        # del model
+        #
+        # ref_model = ChatGlmModel(args.model_type, args.model_name,
+        #                          args={'use_lora': False, 'eval_batch_size': args.batch_size})
+        # test_df['predict_before'] = ref_model.predict(test_df['prompt'].tolist())
+        # logger.debug('test_df result: {}'.format(test_df))
+        # out_df = test_df[['instruction', 'input', 'output', 'predict_before', 'predict_after']]
+        # out_df.to_json('test_result.json', force_ascii=False, orient='records', lines=True)
 
 
 if __name__ == '__main__':
