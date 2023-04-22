@@ -18,7 +18,7 @@ def load_data(file_path):
         for line in f:
             line = line.strip('\n')
             terms = line.split('\t')
-            instruction = '阿迪客服回答：'
+            instruction = '你是意图分类模型，仅回答分类结果：'
             if len(terms) == 2:
                 data.append([instruction, terms[0], terms[1]])
             else:
