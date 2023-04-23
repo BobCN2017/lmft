@@ -112,7 +112,7 @@ def finetune_demo():
         # test_df['predict_before'] = ref_model.predict(test_df['prompt'].tolist())
         logger.debug('test_df result: {}'.format(test_df))
         out_df = test_df[['instruction', 'input', 'output',  'predict_after']]
-        out_df.to_json('test_result.json', force_ascii=False, orient='records', lines=True)
+        out_df.to_json(args.output_dir+'/test_result.json', force_ascii=False, orient='records', lines=True)
 
 
 if __name__ == '__main__':
