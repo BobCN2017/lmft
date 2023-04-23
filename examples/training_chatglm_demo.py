@@ -19,7 +19,7 @@ def load_data(file_path):
         for line in f:
             line = line.strip('\n')
             terms = line.split('\t')
-            instruction = '你是意图分类模型，仅回答分类结果：'
+            instruction = '你是意图分类模型，仅用四个字以内回答分类结果：'
             if len(terms) == 2:
                 data.append([instruction, terms[0], terms[1]])
             else:
@@ -30,7 +30,7 @@ import os
 os.makedirs("/content/gdrive/MyDrive/chatglm/outputs",exist_ok=True)
 
 def finetune_demo():
-    time_str = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d-%H-%M")
+    time_str = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d")
     parser = argparse.ArgumentParser()
     parser.add_argument('--train_file', default='data/train.tsv', type=str, help='Training data file')
     parser.add_argument('--test_file', default='data/test.tsv', type=str, help='Test data file')
