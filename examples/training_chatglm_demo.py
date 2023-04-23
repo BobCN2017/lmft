@@ -19,7 +19,7 @@ def load_data(file_path):
         for line in f:
             line = line.strip('\n')
             terms = line.split('\t')
-            instruction = '你是意图分类模型，仅用四个字以内回答分类结果：'
+            instruction = '你是意图分类模型，仅回答分类结果，并尽量简短：'
             if len(terms) == 2:
                 data.append([instruction, terms[0], terms[1]])
             else:
