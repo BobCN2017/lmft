@@ -19,7 +19,7 @@ def load_data(file_path):
         for line in f:
             line = line.strip('\n')
             terms = line.split('\t')
-            instruction = '你是意图分类模型，仅回答分类结果，并尽量简短：'
+            instruction = '招商银行相前问答，：'
             if len(terms) == 2:
                 data.append([instruction, terms[0], terms[1]])
             else:
@@ -74,7 +74,7 @@ def finetune_demo():
                 args={'use_lora': True, 'eval_batch_size': args.batch_size,
                       'output_dir': args.output_dir, "max_length": args.max_length, }
             )
-        test_data = load_data(args.test_file)
+        test_data = load_data(args.test_file)[:100]
         test_df = pd.DataFrame(test_data, columns=["instruction", "input", "output"])
         logger.debug('test_df: {}'.format(test_df))
 
