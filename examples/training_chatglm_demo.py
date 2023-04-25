@@ -47,7 +47,7 @@ def finetune_demo():
     parser.add_argument('--max_length', default=128, type=int, help='Output max sequence length')
     parser.add_argument('--num_epochs', default=0.2, type=float, help='Number of training epochs')
     parser.add_argument('--batch_size', default=2, type=int, help='Batch size')
-    parser.add_argument('--resume_from_checkpoint', default=None, type=str, help='lora checkpoint path')
+    parser.add_argument('--checkpoint', default=None, type=str, help='lora checkpoint path')
 
     args = parser.parse_args()
     logger.info(args)
@@ -66,7 +66,7 @@ def finetune_demo():
             "save_eval_checkpoints": False,
             "output_dir": args.output_dir,
             'eval_batch_size': args.batch_size,
-            'resume_from_checkpoint': args.output_dir + "/" + args.resume_from_checkpoint if args.resume_from_checkpoint else None
+            'resume_from_checkpoint': args.output_dir + "/" + args.checkpoint if args.checkpoint else None
         }
         model = ChatGlmModel(args.model_type, args.model_name, args=model_args)
         train_data = load_data(args.train_file)
