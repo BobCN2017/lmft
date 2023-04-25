@@ -255,7 +255,7 @@ class ChatGlmModel:
             tokenizer=self.tokenizer,
             data_collator=self.data_collator,
         )
-        (global_step, training_loss, metrics) = trainer.train()
+        (global_step, training_loss, metrics) = trainer.train(resume_from_checkpoint=True)
 
         self.save_model(model=self.model)
 
