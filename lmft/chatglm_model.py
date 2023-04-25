@@ -12,7 +12,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from loguru import logger
-from peft import get_peft_model, LoraConfig, TaskType, PeftModel
+from peft import get_peft_model, LoraConfig, TaskType, PeftModel, set_peft_model_state_dict
 from tqdm.auto import tqdm
 from transformers import Trainer, TrainingArguments, AutoTokenizer, AutoModel, AutoConfig
 from transformers.trainer import TRAINING_ARGS_NAME
@@ -125,7 +125,7 @@ class ChatGlmModel:
 
         self.lora_name = lora_name
         self.lora_loaded = False
-
+        self.resume_from_checkpoint = args.resume_from_checkpoint
 
     def data_collator(self, batch):
         len_ids = [len(example) for example in batch]
@@ -209,6 +209,7 @@ class ChatGlmModel:
         self.model.model_parallel = True
         self.model.lm_head = CastOutputToFloat(self.model.lm_head)
         self.model.config.use_cache = False
+        resume_from_checkpoint = self.args.resume_from_checkpoint
 
         # setup peft, add lora config
         if self.args.use_lora:
@@ -220,11 +221,27 @@ class ChatGlmModel:
                 lora_dropout=self.args.lora_dropout,
             )
             self.model = get_peft_model(self.model, peft_config)
+
+            if resume_from_checkpoint:
+                # Check the available weights and load them
+                checkpoint_name = os.path.join(resume_from_checkpoint, "pytorch_model.bin")  # Full checkpoint
+                if not os.path.exists(checkpoint_name):
+                    checkpoint_name = os.path.join(
+                        resume_from_checkpoint, "adapter_model.bin")  # only LoRA model - LoRA config above has to fit
+                    resume_from_checkpoint = (
+                        False  # So the trainer won't try loading its state
+                    )
+                # The two files above have a different name depending on how they were saved, but are actually the same.
+                if os.path.exists(checkpoint_name):
+                    logger.info(f"Restarting from {checkpoint_name}")
+                    adapters_weights = torch.load(checkpoint_name)
+                    self.model = set_peft_model_state_dict(self.model, adapters_weights)
+                else:
+                    logger.warning(f"Checkpoint {checkpoint_name} not found")
+
             print_trainable_parameters(self.model)
-            # 加载 checkpoint
-            # checkpoint = torch.load(self.args.output_dir + '/checkpoint-9000')
-            # self.model.load_state_dict(checkpoint["state_dict"])
             self.lora_loaded = True
+
         self._move_model_to_device()
         # load dataset
         train_dataset = self.load_and_cache_examples(train_data, verbose=verbose)
@@ -260,8 +277,7 @@ class ChatGlmModel:
             data_collator=self.data_collator,
         )
 
-
-        (global_step, training_loss, metrics) = trainer.train()
+        (global_step, training_loss, metrics) = trainer.train(resume_from_checkpoint=resume_from_checkpoint)
 
         self.save_model(model=self.model)
 

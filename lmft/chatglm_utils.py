@@ -166,7 +166,7 @@ class ChatGLMArgs(ModelArgs):
     remove_unused_columns = False
     logging_steps = 50
     quantization_bit = None  # if use quantization bit, set 8 or 4, else None
-
+    resume_from_checkpoint = None
 
 def preprocess_data(data):
     instruction, input_text, target_text, tokenizer, args = data
