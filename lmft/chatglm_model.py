@@ -221,6 +221,9 @@ class ChatGlmModel:
             )
             self.model = get_peft_model(self.model, peft_config)
             print_trainable_parameters(self.model)
+            # 加载 checkpoint
+            checkpoint = torch.load("self.args.output_dir" + '/checkpoint-9000')
+            self.model.load_state_dict(checkpoint["state_dict"])
             self.lora_loaded = True
         self._move_model_to_device()
         # load dataset
@@ -247,6 +250,7 @@ class ChatGlmModel:
             overwrite_output_dir=self.args.overwrite_output_dir,
             no_cuda=True if self.device == "cpu" else False,
         )
+
         logger.debug(f"training_args: {training_args}")
         trainer = FinetuneTrainer(
             model=self.model,
@@ -255,7 +259,9 @@ class ChatGlmModel:
             tokenizer=self.tokenizer,
             data_collator=self.data_collator,
         )
-        (global_step, training_loss, metrics) = trainer.train(resume_from_checkpoint=True)
+
+
+        (global_step, training_loss, metrics) = trainer.train()
 
         self.save_model(model=self.model)
 
