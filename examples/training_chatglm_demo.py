@@ -26,11 +26,14 @@ def load_data(file_path):
                 logger.warning(f'line error: {line}')
     return data
 
+
 import os
-os.makedirs("/content/gdrive/MyDrive/chatglm/outputs",exist_ok=True)
+
+os.makedirs("/content/gdrive/MyDrive/chatglm/outputs", exist_ok=True)
+
 
 def finetune_demo():
-    time_str = datetime.datetime.strftime(datetime.datetime.now(),"%Y-%m-%d")
+    time_str = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d")
     parser = argparse.ArgumentParser()
     parser.add_argument('--train_file', default='data/train.tsv', type=str, help='Training data file')
     parser.add_argument('--test_file', default='data/test.tsv', type=str, help='Test data file')
@@ -38,7 +41,8 @@ def finetune_demo():
     parser.add_argument('--model_name', default='/content/chatglm-6b', type=str, help='Transformers model or path')
     parser.add_argument('--do_train', action='store_true', help='Whether to run training.')
     parser.add_argument('--do_predict', action='store_true', help='Whether to run predict.')
-    parser.add_argument('--output_dir', default='/content/gdrive/MyDrive/chatglm/outputs/'+time_str, type=str, help='Model output directory')
+    parser.add_argument('--output_dir', default='/content/gdrive/MyDrive/chatglm/outputs/' + time_str, type=str,
+                        help='Model output directory')
     parser.add_argument('--max_seq_length', default=128, type=int, help='Input max sequence length')
     parser.add_argument('--max_length', default=128, type=int, help='Output max sequence length')
     parser.add_argument('--num_epochs', default=0.2, type=float, help='Number of training epochs')
@@ -61,7 +65,8 @@ def finetune_demo():
             "output_dir": args.output_dir,
             'eval_batch_size': args.batch_size,
         }
-        model = ChatGlmModel(args.model_type, args.model_name, args=model_args)
+        model = ChatGlmModel(args.model_type, args.model_name, args=model_args,
+                             lora_name=args.output_dir + "/checkpoint-9000")
         train_data = load_data(args.train_file)
         logger.debug('train_data: {}'.format(train_data[:10]))
         train_df = pd.DataFrame(train_data, columns=["instruction", "input", "output"])
@@ -111,8 +116,8 @@ def finetune_demo():
         #                          args={'use_lora': False, 'eval_batch_size': args.batch_size})
         # test_df['predict_before'] = ref_model.predict(test_df['prompt'].tolist())
         logger.debug('test_df result: {}'.format(test_df))
-        out_df = test_df[['instruction', 'input', 'output',  'predict_after']]
-        out_df.to_json(args.output_dir+'/test_result.json', force_ascii=False, orient='records', lines=True)
+        out_df = test_df[['instruction', 'input', 'output', 'predict_after']]
+        out_df.to_json(args.output_dir + '/test_result.json', force_ascii=False, orient='records', lines=True)
 
 
 if __name__ == '__main__':
