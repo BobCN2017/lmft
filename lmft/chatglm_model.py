@@ -222,7 +222,7 @@ class ChatGlmModel:
             self.model = get_peft_model(self.model, peft_config)
             print_trainable_parameters(self.model)
             # 加载 checkpoint
-            checkpoint = torch.load("self.args.output_dir" + '/checkpoint-9000')
+            checkpoint = torch.load(self.args.output_dir + '/checkpoint-9000')
             self.model.load_state_dict(checkpoint["state_dict"])
             self.lora_loaded = True
         self._move_model_to_device()
