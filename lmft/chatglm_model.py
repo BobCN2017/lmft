@@ -125,7 +125,7 @@ class ChatGlmModel:
 
         self.lora_name = lora_name
         self.lora_loaded = False
-        self.resume_from_checkpoint = args.resume_from_checkpoint
+        self.resume_from_checkpoint = args.get("resume_from_checkpoint")
 
     def data_collator(self, batch):
         len_ids = [len(example) for example in batch]
