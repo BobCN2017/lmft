@@ -47,7 +47,8 @@ def finetune_demo():
     parser.add_argument('--max_length', default=128, type=int, help='Output max sequence length')
     parser.add_argument('--num_epochs', default=0.2, type=float, help='Number of training epochs')
     parser.add_argument('--batch_size', default=2, type=int, help='Batch size')
-    parser.add_argument('--checkpoint', default=None, type=str, help='lora checkpoint path')
+    parser.add_argument('--eval_file', default="data/eval.tsv", type=str, help='Eval data file')
+    parser.add_argument('--eval_step', default=1000, type=int, help='Eval step')
 
     args = parser.parse_args()
     logger.info(args)
@@ -66,14 +67,20 @@ def finetune_demo():
             "save_eval_checkpoints": False,
             "output_dir": args.output_dir,
             'eval_batch_size': args.batch_size,
-            'resume_from_checkpoint': args.output_dir + "/" + args.checkpoint if args.checkpoint else None
+            'resume_from_checkpoint': args.output_dir + "/" + args.checkpoint if args.checkpoint else None,
         }
+        eval_data = None
+        if args.eval_file and os.path.exists(args.eval_file):
+            model_args["evaluate_during_training"] = True
+            eval_data = pd.DataFrame(load_data(args.eval_file), columns=["instruction", "input", "output"])
+            logger.debug('eval_data: {}'.format(eval_data[:5]))
+            model_args["evaluate_during_training_steps"] = args.eval_steps
         model = ChatGlmModel(args.model_type, args.model_name, args=model_args)
         train_data = load_data(args.train_file)
         logger.debug('train_data: {}'.format(train_data[:10]))
         train_df = pd.DataFrame(train_data, columns=["instruction", "input", "output"])
 
-        model.train_model(train_df)
+        model.train_model(train_df, eval_data)
     if args.do_predict:
         if model is None:
             model = ChatGlmModel(

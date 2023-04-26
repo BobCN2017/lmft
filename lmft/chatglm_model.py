@@ -268,14 +268,18 @@ class ChatGlmModel:
             no_cuda=True if self.device == "cpu" else False,
         )
 
-        logger.debug(f"training_args: {training_args}")
+        if self.args.evaluate_during_training:
+            training_args.eval_steps = self.args.evaluate_during_training_steps
+
         trainer = FinetuneTrainer(
             model=self.model,
             train_dataset=train_dataset,
             args=training_args,
             tokenizer=self.tokenizer,
             data_collator=self.data_collator,
+            eval_dataset=eval_data,
         )
+        logger.debug(f"training_args: {training_args}")
 
         (global_step, training_loss, metrics) = trainer.train(resume_from_checkpoint=resume_from_checkpoint)
 

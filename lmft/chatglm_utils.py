@@ -150,7 +150,7 @@ class ChatGLMArgs(ModelArgs):
     top_k: float = None
     top_p: float = 0.7
     model_name_or_path: Optional[str] = field(default="THUDM/chatglm-6b")
-    dataset_name_or_path: Optional[str] = field(default="shibing624/alpaca-zh")
+    dataset_name_or_path: Optional[str] = field(default="bic/zh-18w")
     use_lora: bool = True
     lora_name: str = field(default="adapter_model.bin")
     lora_rank: int = field(default=8)
@@ -161,7 +161,7 @@ class ChatGLMArgs(ModelArgs):
     num_train_epochs = 1
     max_steps = -1
     per_device_train_batch_size = 2
-    gradient_accumulation_steps = 1
+    gradient_accumulation_steps = 4
     save_total_limit = 2
     remove_unused_columns = False
     logging_steps = 50
