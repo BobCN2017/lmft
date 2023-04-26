@@ -81,7 +81,7 @@ def finetune_demo():
         logger.debug('train_data: {}'.format(train_data[:10]))
         train_df = pd.DataFrame(train_data, columns=["instruction", "input", "output"])
 
-        model.train_model(train_df, eval_data)
+        model.train_model(train_df, eval_data=eval_data)
     if args.do_predict:
         if model is None:
             model = ChatGlmModel(
