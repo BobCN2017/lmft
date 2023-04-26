@@ -266,6 +266,7 @@ class ChatGlmModel:
             remove_unused_columns=self.args.remove_unused_columns,
             overwrite_output_dir=self.args.overwrite_output_dir,
             no_cuda=True if self.device == "cpu" else False,
+            do_eval=True if self.args.evaluate_during_training else False
         )
 
         if self.args.evaluate_during_training:
@@ -277,7 +278,7 @@ class ChatGlmModel:
             args=training_args,
             tokenizer=self.tokenizer,
             data_collator=self.data_collator,
-            eval_dataset=eval_data,
+            eval_dataset=eval_data
         )
         logger.debug(f"training_args: {training_args}")
 
