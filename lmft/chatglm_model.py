@@ -245,6 +245,7 @@ class ChatGlmModel:
         self._move_model_to_device()
         # load dataset
         train_dataset = self.load_and_cache_examples(train_data, verbose=verbose)
+        eval_dataset = self.load_and_cache_examples(eval_data, evaluate=True, verbose=verbose)
         os.makedirs(output_dir, exist_ok=True)
         logger.debug(f"dataset: {train_dataset} first row: {next(iter(train_dataset))}")
 
@@ -279,7 +280,7 @@ class ChatGlmModel:
             args=training_args,
             tokenizer=self.tokenizer,
             data_collator=self.data_collator,
-            eval_dataset=eval_data
+            eval_dataset=eval_dataset
         )
         logger.debug(f"training_args: {training_args}")
 
