@@ -76,6 +76,8 @@ def finetune_demo():
             eval_data = pd.DataFrame(load_data(args.eval_file), columns=["instruction", "input", "output"])
             logger.debug('eval_data: {}'.format(eval_data[:5]))
             model_args["evaluate_during_training_steps"] = args.eval_steps
+            model_args["evaluate_during_training"] = True
+            model_args["evaluate_during_training_silent"] = False
         model = ChatGlmModel(args.model_type, args.model_name, args=model_args)
         train_data = load_data(args.train_file)
         logger.debug('train_data: {}'.format(train_data[:10]))
