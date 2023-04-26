@@ -271,6 +271,7 @@ class ChatGlmModel:
 
         if self.args.evaluate_during_training:
             training_args.eval_steps = self.args.evaluate_during_training_steps
+            training_args.evaluation_strategy = "steps"
 
         trainer = FinetuneTrainer(
             model=self.model,
