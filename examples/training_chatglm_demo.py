@@ -49,7 +49,7 @@ def finetune_demo():
     parser.add_argument('--batch_size', default=2, type=int, help='Batch size')
     parser.add_argument('--checkpoint', default=None, type=str, help='lora checkpoint path')
     parser.add_argument('--eval_file', default="data/eval.tsv", type=str, help='Eval data file')
-    parser.add_argument('--eval_step', default=1000, type=int, help='Eval step')
+    parser.add_argument('--eval_steps', default=1000, type=int, help='Eval steps')
 
     args = parser.parse_args()
     logger.info(args)
