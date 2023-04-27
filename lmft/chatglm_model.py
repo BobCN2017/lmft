@@ -297,6 +297,7 @@ class ChatGlmModel:
         return global_step, training_loss
 
     def load_lora(self):
+        print("start load lora......")
         if self.args.use_lora:
             if self.lora_name:
                 self.model = PeftModel.from_pretrained(self.model, self.lora_name)
