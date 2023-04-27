@@ -395,7 +395,7 @@ class ChatGlmModel:
         self.model.eval()
         if history is None:
             history = []
-        prompt = kwargs.get("prompt") if "prompt" in kwargs else ""
+        prompt = kwargs.pop("prompt") if "prompt" in kwargs else ""
         if not history:
             prompt += query
         else:
