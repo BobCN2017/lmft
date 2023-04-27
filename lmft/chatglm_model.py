@@ -395,10 +395,10 @@ class ChatGlmModel:
         self.model.eval()
         if history is None:
             history = []
+        prompt = kwargs.get("prompt") if "prompt" in kwargs else ""
         if not history:
-            prompt = query
+            prompt += query
         else:
-            prompt = ""
             for i, (old_query, response) in enumerate(history):
                 prompt += "[Round {}]\n问：{}\n答：{}\n".format(i, old_query, response)
             prompt += "[Round {}]\n问：{}\n答：".format(len(history), query)
