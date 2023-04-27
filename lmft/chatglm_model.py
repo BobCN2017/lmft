@@ -301,6 +301,7 @@ class ChatGlmModel:
             if self.lora_name:
                 self.model = PeftModel.from_pretrained(self.model, self.lora_name)
                 logger.info(f"Loaded lora model from {self.lora_name}")
+                print(f"Loaded lora model from {self.lora_name}")
                 self.lora_loaded = True
             else:
                 lora_path = os.path.join(self.args.output_dir, self.args.lora_name)
@@ -308,6 +309,7 @@ class ChatGlmModel:
                     # infer with trained lora model
                     self.model = PeftModel.from_pretrained(self.model, self.args.output_dir)
                     logger.info(f"Loaded lora model from {lora_path}")
+                    print(f"Loaded lora model from {lora_path}")
                     self.lora_loaded = True
 
     def process_response(self, response):
