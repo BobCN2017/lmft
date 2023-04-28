@@ -70,11 +70,12 @@ def finetune_demo():
             'eval_batch_size': args.batch_size,
             'resume_from_checkpoint': args.output_dir + "/" + args.checkpoint if args.checkpoint else None,
         }
-        eval_data = None
+        eval_df = None
         if args.eval_file and os.path.exists(args.eval_file):
             model_args["evaluate_during_training"] = True
-            eval_data = pd.DataFrame(load_data(args.eval_file), columns=["instruction", "input", "output"])
+            eval_data = load_data(args.eval_file)
             logger.debug('eval_data: {}'.format(eval_data[:5]))
+            eval_df = pd.DataFrame(eval_data, columns=["instruction", "input", "output"])
             model_args["evaluate_during_training_steps"] = args.eval_steps
             model_args["evaluate_during_training"] = True
             model_args["evaluate_during_training_silent"] = False
@@ -83,7 +84,7 @@ def finetune_demo():
         logger.debug('train_data: {}'.format(train_data[:10]))
         train_df = pd.DataFrame(train_data, columns=["instruction", "input", "output"])
 
-        model.train_model(train_df, eval_data=eval_data)
+        model.train_model(train_df, eval_data=eval_df)
     if args.do_predict:
         if model is None:
             model = ChatGlmModel(

@@ -223,7 +223,7 @@ class ChatGLMDataset(Dataset):
             + str(args.max_seq_length)
             + str(len(data)),
         )
-
+        logger.info(" Creating ChatGLMDataset")
         if os.path.exists(cached_features_file) and (
                 (not args.reprocess_input_data and not args.no_cache)
                 or (mode == "dev" and args.use_cached_eval_features and not args.no_cache)
