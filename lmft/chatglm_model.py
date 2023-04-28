@@ -244,7 +244,7 @@ class ChatGlmModel:
 
         self._move_model_to_device()
         # load dataset
-        eval_dataset = self.load_and_cache_examples(eval_data, verbose=verbose) if eval_data else None
+        eval_dataset = self.load_and_cache_examples(eval_data, verbose=verbose) if eval_data is not None else None
         train_dataset = self.load_and_cache_examples(train_data, verbose=verbose)
         os.makedirs(output_dir, exist_ok=True)
         logger.debug(f"dataset: {train_dataset} first row: {next(iter(train_dataset))}")
