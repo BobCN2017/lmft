@@ -50,6 +50,7 @@ def finetune_demo():
     parser.add_argument('--checkpoint', default=None, type=str, help='lora checkpoint path')
     parser.add_argument('--eval_file', default="data/eval.tsv", type=str, help='Eval data file')
     parser.add_argument('--eval_steps', default=1000, type=int, help='Eval steps')
+    parser.add_argument('--reverse_data', default=False, type=bool, help='reverse data')
 
     args = parser.parse_args()
     logger.info(args)
@@ -82,6 +83,10 @@ def finetune_demo():
         model = ChatGlmModel(args.model_type, args.model_name, args=model_args)
         train_data = load_data(args.train_file)
         logger.debug('train_data: {}'.format(train_data[:10]))
+        if args.reverse_data:
+            logger.info(f"reverse data.{len(train_data)}")
+            train_data = train_data[::-1]
+            logger.debug('train_data: {}'.format(train_data[:10]))
         train_df = pd.DataFrame(train_data, columns=["instruction", "input", "output"])
 
         model.train_model(train_df, eval_data=eval_df)
