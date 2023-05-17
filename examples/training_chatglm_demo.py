@@ -43,8 +43,8 @@ def finetune_demo():
     parser.add_argument('--do_predict', action='store_true', help='Whether to run predict.')
     parser.add_argument('--output_dir', default='/content/gdrive/MyDrive/chatglm/outputs/' + time_str, type=str,
                         help='Model output directory')
-    parser.add_argument('--max_seq_length', default=1024, type=int, help='Input max sequence length')
-    parser.add_argument('--max_length', default=2048, type=int, help='Output max sequence length')
+    parser.add_argument('--max_seq_length', default=256, type=int, help='Input max sequence length')
+    parser.add_argument('--max_length', default=1024, type=int, help='Output max sequence length')
     parser.add_argument('--num_epochs', default=0.2, type=float, help='Number of training epochs')
     parser.add_argument('--batch_size', default=2, type=int, help='Batch size')
     parser.add_argument('--checkpoint', default=None, type=str, help='lora checkpoint path')
