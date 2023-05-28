@@ -69,7 +69,7 @@ class ChatGlmModel:
             self.args.update_from_dict(args)
         elif isinstance(args, ChatGLMArgs):
             self.args = args
-
+        logger.info(f"args:{args}")
         self.is_sweeping = False
         if self.args.manual_seed:
             random.seed(self.args.manual_seed)
@@ -244,7 +244,8 @@ class ChatGlmModel:
 
         self._move_model_to_device()
         # load dataset
-        eval_dataset = self.load_and_cache_examples(eval_data, verbose=verbose,evaluate=True) if eval_data is not None else None
+        eval_dataset = self.load_and_cache_examples(eval_data, verbose=verbose,
+                                                    evaluate=True) if eval_data is not None else None
         train_dataset = self.load_and_cache_examples(train_data, verbose=verbose)
         os.makedirs(output_dir, exist_ok=True)
         logger.debug(f"dataset: {train_dataset} first row: {next(iter(train_dataset))}")
@@ -305,7 +306,8 @@ class ChatGlmModel:
                 self.lora_loaded = True
             else:
                 lora_path = os.path.join(self.args.output_dir, self.args.lora_name)
-                logger.info(f"Loaded lora model lora_path {lora_path},if lora_path and os.path.exists(lora_path):{lora_path and os.path.exists(lora_path)}")
+                logger.info(
+                    f"Loaded lora model lora_path {lora_path},if lora_path and os.path.exists(lora_path):{lora_path and os.path.exists(lora_path)}")
                 if lora_path and os.path.exists(lora_path):
                     # infer with trained lora model
                     self.model = PeftModel.from_pretrained(self.model, self.args.output_dir)
