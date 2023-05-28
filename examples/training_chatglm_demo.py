@@ -52,6 +52,7 @@ def finetune_demo():
     parser.add_argument('--eval_steps', default=1000, type=int, help='Eval steps')
     parser.add_argument('--reverse_data', default=False, type=bool, help='reverse data')
     parser.add_argument('--temperature', default=0.95, type=float, help='temperature')
+    parser.add_argument('--repetition_penalty', default=1.0, type=float, help='repetition_penalty')
 
     args = parser.parse_args()
     logger.info(args)
@@ -96,7 +97,8 @@ def finetune_demo():
             model = ChatGlmModel(
                 args.model_type, args.model_name,
                 args={'use_lora': True, 'eval_batch_size': args.batch_size,
-                      'output_dir': args.output_dir, "max_length": args.max_length, "temperature": args.temperature}
+                      'output_dir': args.output_dir, "max_length": args.max_length, "temperature": args.temperature,
+                      'repetition_penalty': args.repetition_penalty}
             )
         test_data = load_data(args.test_file)[:100]
         test_df = pd.DataFrame(test_data, columns=["instruction", "input", "output"])
