@@ -100,7 +100,7 @@ def finetune_demo():
                       'output_dir': args.output_dir, "max_length": args.max_length, "temperature": args.temperature,
                       'repetition_penalty': args.repetition_penalty}
             )
-        test_data = load_data(args.test_file)[:100]
+        test_data = load_data(args.test_file)[:300]
         test_df = pd.DataFrame(test_data, columns=["instruction", "input", "output"])
         logger.debug('test_df: {}'.format(test_df))
 
