@@ -207,7 +207,7 @@ class ChatGlmModel:
         self.model.enable_input_require_grads()
         self.model.is_parallelizable = True
         self.model.model_parallel = True
-        self.model.lm_head = CastOutputToFloat(self.model.lm_head)
+        # self.model.lm_head = CastOutputToFloat(self.model.lm_head)
         self.model.config.use_cache = False
         resume_from_checkpoint = self.args.resume_from_checkpoint
 
