@@ -19,7 +19,7 @@ def load_data(file_path):
         for line in f:
             line = line.strip('\n')
             terms = line.split('\t')
-            instruction = '招商银行相关问答：'
+            instruction = '格瑞维亚GRANVIA相关问答：'
             if len(terms) == 2:
                 data.append([instruction, terms[0], terms[1]])
             else:
@@ -29,7 +29,7 @@ def load_data(file_path):
 
 import os
 
-os.makedirs("/content/gdrive/MyDrive/chatglm/outputs", exist_ok=True)
+os.makedirs("/content/gdrive/MyDrive/chatglm2/outputs", exist_ok=True)
 
 
 def finetune_demo():
@@ -44,9 +44,9 @@ def finetune_demo():
     parser.add_argument('--output_dir', default='/content/gdrive/MyDrive/chatglm/outputs/' + time_str, type=str,
                         help='Model output directory')
     parser.add_argument('--max_seq_length', default=256, type=int, help='Input max sequence length')
-    parser.add_argument('--max_length', default=1024, type=int, help='Output max sequence length')
+    parser.add_argument('--max_length', default=256, type=int, help='Output max sequence length')
     parser.add_argument('--num_epochs', default=0.2, type=float, help='Number of training epochs')
-    parser.add_argument('--batch_size', default=2, type=int, help='Batch size')
+    parser.add_argument('--batch_size', default=4, type=int, help='Batch size')
     parser.add_argument('--checkpoint', default=None, type=str, help='lora checkpoint path')
     parser.add_argument('--eval_file', default="data/eval.tsv", type=str, help='Eval data file')
     parser.add_argument('--eval_steps', default=1000, type=int, help='Eval steps')
@@ -115,22 +115,22 @@ def finetune_demo():
 
         response, history = model.chat("你好", history=[])
         print(response)
-        response, history = model.chat("晚上睡不着应该怎么办", history=history)
-        print(response)
-        response, history = model.chat("李明是李丽的哥哥，刘云是李丽的妈妈，李明是刘云的谁？", history=[])
-        print(response)
-        response, history = model.chat("江西省的省会，介绍一下", history=[])
-        print(response)
-
-        response, history = model.chat("一步步的算：520+250=", history=history)
-        print(response)
-        response, history = model.chat("讲个笑话", history=[])
-        print(response)
-
-        response, history = model.chat("写一段快速排序的python", history=history)
-        print(response)
-        response, history = model.chat("我的蓝牙耳机坏了，我应该是去看哪个医院或牙医", history=[])
-        print(response)
+        # response, history = model.chat("晚上睡不着应该怎么办", history=history)
+        # print(response)
+        # response, history = model.chat("李明是李丽的哥哥，刘云是李丽的妈妈，李明是刘云的谁？", history=[])
+        # print(response)
+        # response, history = model.chat("江西省的省会，介绍一下", history=[])
+        # print(response)
+        #
+        # response, history = model.chat("一步步的算：520+250=", history=history)
+        # print(response)
+        # response, history = model.chat("讲个笑话", history=[])
+        # print(response)
+        #
+        # response, history = model.chat("写一段快速排序的python", history=history)
+        # print(response)
+        # response, history = model.chat("我的蓝牙耳机坏了，我应该是去看哪个医院或牙医", history=[])
+        # print(response)
         # del model
         #
         # ref_model = ChatGlmModel(args.model_type, args.model_name,

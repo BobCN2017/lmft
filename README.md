@@ -62,7 +62,7 @@ print(r) # ['少先队员应该为老人让座。\n错误字：因，坐']
 
 ## 训练ChatGLM-6B LoRA模型
 
-支持自定义数据集，数据集格式参考[examples/data/test.tsv](examples/data/test.tsv)。
+支持自定义数据集，数据集格式参考[examples/data/test.tsv](examples/backup/test.tsv)。
 
 
 example: [examples/training_chatglm_demo.py](examples/training_chatglm_demo.py)
