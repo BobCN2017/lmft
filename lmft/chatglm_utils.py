@@ -180,7 +180,6 @@ def preprocess_data(data):
     prompt_ids = tokenizer.encode(prompt, max_length=args.max_seq_length)
     target_ids = tokenizer.encode(target_text, max_length=args.max_length,
                                   add_special_tokens=False)
-    print("bos_token_id:", prompt_ids[-1])
     input_ids = prompt_ids + target_ids
     input_ids = input_ids[:(args.max_seq_length + args.max_length)] + [tokenizer.eos_token_id]
 

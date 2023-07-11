@@ -134,7 +134,7 @@ class ChatGlmModel:
         labels_list = []
         for ids_l, feature in sorted(zip(len_ids, batch), key=lambda x: -x[0]):
             ids = list(feature)
-            seq_len = ids.index(-1001) + 1
+            seq_len = ids.index(31211) + 1
             label_pad_token_id = -100
             labels = (
                     [label_pad_token_id] * (seq_len - 1)
