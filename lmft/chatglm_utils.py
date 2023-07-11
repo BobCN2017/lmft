@@ -168,6 +168,7 @@ class ChatGLMArgs(ModelArgs):
     quantization_bit = None  # if use quantization bit, set 8 or 4, else None
     resume_from_checkpoint = None
 
+
 def preprocess_data(data):
     instruction, input_text, target_text, tokenizer, args = data
 
@@ -176,10 +177,10 @@ def preprocess_data(data):
         prompt += f"{input_text}\n"
     prompt += "答："
 
-    prompt_ids = tokenizer.encode(prompt, max_length=args.max_seq_length)
+    prompt_ids = tokenizer.encode(prompt, max_length=args.max_seq_length, add_special_tokens=False)
     target_ids = tokenizer.encode(target_text, max_length=args.max_length,
                                   add_special_tokens=False)
-    input_ids = prompt_ids + target_ids
+    input_ids = prompt_ids + [-1001] + target_ids
     input_ids = input_ids[:(args.max_seq_length + args.max_length)] + [tokenizer.eos_token_id]
 
     return input_ids

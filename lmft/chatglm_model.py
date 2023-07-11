@@ -98,7 +98,7 @@ class ChatGlmModel:
         self.results = {}
         config_class, model_class, tokenizer_class = MODEL_CLASSES[model_type]
         if model_name is None:
-            model_name = "THUDM/chatglm-6b"
+            model_name = "THUDM/chatglm2-6b"
         config = AutoConfig.from_pretrained(model_name, trust_remote_code=True, **kwargs)
         if use_cuda and torch.cuda.is_available():
             self.model = model_class.from_pretrained(model_name, config=config, trust_remote_code=True)
@@ -134,7 +134,7 @@ class ChatGlmModel:
         labels_list = []
         for ids_l, feature in sorted(zip(len_ids, batch), key=lambda x: -x[0]):
             ids = list(feature)
-            seq_len = ids.index(self.tokenizer.bos_token_id) + 1  # is equal to `seq_len = seq.index(150004) + 1`
+            seq_len = ids.index(-1001) + 1
             label_pad_token_id = -100
             labels = (
                     [label_pad_token_id] * (seq_len - 1)
@@ -285,7 +285,7 @@ class ChatGlmModel:
         )
         logger.debug(f"training_args: {training_args}")
 
-        (global_step, training_loss, metrics) = trainer.train(resume_from_checkpoint=resume_from_checkpoint)
+        trainer.train(resume_from_checkpoint=resume_from_checkpoint)
 
         self.save_model(model=self.model)
 
@@ -295,7 +295,6 @@ class ChatGlmModel:
                     self.args.model_name, output_dir
                 )
             )
-        return global_step, training_loss
 
     def load_lora(self):
         print(f"start load lora...... use_lora:{self.args.use_lora}")
