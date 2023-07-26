@@ -3,5 +3,5 @@ transformers>=4.27.1
 datasets
 tqdm
 cpm_kernels
-peft
+peft>=0.3.0
 gradio
