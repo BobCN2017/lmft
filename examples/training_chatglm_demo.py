@@ -19,7 +19,7 @@ def load_data(file_path):
         for line in f:
             line = line.strip('\n')
             terms = line.split('\t')
-            instruction = '格瑞维亚GRANVIA相关问答：'
+            instruction = ''
             if len(terms) == 2:
                 data.append([instruction, terms[0], terms[1]])
             else:
